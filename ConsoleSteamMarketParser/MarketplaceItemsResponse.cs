@@ -8,13 +8,9 @@ namespace ConsoleSteamMarketParser
 {
     class MarketplaceQuerryResponse
     {
-        public MarketplaceItemsList results { get; set; }
+        public List<MarketplaceItemsResponse> results { get; set; }
     }
-    class MarketplaceItemsList : List<MarketplaceItem>
-    {
-
-    }
-    class MarketplaceItem
+    class MarketplaceItemsResponse
     {
         public string name { get; set; }
         public string url { get

@@ -8,21 +8,22 @@ using System.Text;
 
 namespace ConsoleSteamMarketParser
 {
-    class MarketplaceQuerryResponse
+    class MarketplaceQueryResponse
     {
-        public List<MarketplaceQuerryItem> results { get; set; }
+        public List<MarketplaceQueryItem> results { get; set; }
 
         public void AddToMarketplaceList(MarketplaceList list)
         {
             List<MarketplaceItem> newItemsList = new List<MarketplaceItem>();
-            foreach(MarketplaceQuerryItem queryItem in results)
+
+            foreach(MarketplaceQueryItem queryItem in results)
             {
                 newItemsList.Add(queryItem.ConvertToItem());
             }
             list.AddRange(newItemsList);
         }
     }
-    class MarketplaceQuerryItem
+    class MarketplaceQueryItem
     {
         public string name { get; set; }
         public string url { get

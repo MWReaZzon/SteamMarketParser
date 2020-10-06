@@ -33,12 +33,14 @@ namespace ConsoleSteamMarketParser
             {
                 client.DefaultRequestHeaders.Add("Cookie", "steamLoginSecure=76561198118722085%7C%7CE9851F9BF37D3C77410335144DDBA92ECFF2AF11");
                 string responseBody = await client.GetStringAsync(link);
+                Uri uri = new Uri(link);
+                HttpResponseMessage httpResponse = await client.GetAsync(link);
                 responseExpando = JsonSerializer.Deserialize<ExpandoObject>(responseBody);
                 mpItemExpando = JsonSerializer.Deserialize<ExpandoObject>(responseExpando.results[0].GetRawText());
                 mpItemDescription = JsonSerializer.Deserialize<ExpandoObject>(mpItemExpando.asset_description.GetRawText());
                 response = JsonSerializer.Deserialize<MarketplaceQuerryResponse>(responseBody);
                 //Console.WriteLine(response.ToString());
-                Console.WriteLine(responseBody);
+                Console.WriteLine(uri.Query);
 
                 XLWorkbook workbook = new XLWorkbook();
                 IXLWorksheet worksheet = workbook.Worksheets.Add("Coins");
@@ -48,22 +50,25 @@ namespace ConsoleSteamMarketParser
                 worksheet.Cell(1, 4).Value = "Color";
                 worksheet.Cell(1, 5).Value = "Amount";
                 worksheet.Cell(1, 6).Value = "Price";
+
                 worksheet.Cells(true).Style.Font.SetBold();
 
                 for (int i = 0; i < response.results.Count; i++)
                 {
-                    MarketplaceItemsResponse item = response.results[i];
+                    MarketplaceQuerryItem item = response.results[i];
 
                     worksheet.Cell(i + 2, 1).Hyperlink = new XLHyperlink(@item.url);
                     worksheet.Cell(i + 2, 1).Value = item.url;
                     worksheet.Cell(i + 2, 2).Value = item.name;
                     worksheet.Cell(i + 2, 3).Value = item.asset_description.descriptions[0].value;
                     worksheet.Cell(i + 2, 4).Value = "#" + item.asset_description.name_color;
-                    worksheet.Cell(i + 2, 4).Style.Fill.BackgroundColor = XLColor.FromArgb(0xFFFFFF);
+                    worksheet.Cell(i + 2, 4).Style.Fill.BackgroundColor = XLColor.FromArgb(Convert.ToInt32(item.asset_description.name_color, 16));
                     worksheet.Cell(i + 2, 5).Value = item.sell_listings;
-                    worksheet.Cell(i + 2, 6).Value = item.sell_price_text;
+                    worksheet.Cell(i + 2, 6).Value = item.sell_price / 100.0;
+                    Console.WriteLine(item.sell_price / 100.0);
+                    worksheet.Cell(i + 2, 6).Style.NumberFormat.Format = "0.00₴";
+                    worksheet.Columns(2, 6).AdjustToContents();
                 }
-
                 workbook.SaveAs("d:\\file.xlsx");
             }
             catch (HttpRequestException e)

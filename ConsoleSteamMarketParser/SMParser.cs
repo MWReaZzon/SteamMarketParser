@@ -3,6 +3,8 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -41,7 +43,7 @@ namespace ConsoleSteamMarketParser
 
             if(count > 100)
             {
-                try
+                /*try
                 {
                     for (int pos = 100; pos <= count; pos += 100)
                     {
@@ -59,7 +61,7 @@ namespace ConsoleSteamMarketParser
                     Console.WriteLine("\nException Caught!");
                     Console.WriteLine("Message :{0}", e.Message);
                     Console.WriteLine("Saving {0} items", items.Count);
-                }
+                }*/
             }
 
             return items;
@@ -76,7 +78,7 @@ namespace ConsoleSteamMarketParser
             return items;
         }
 
-        public async static Task ParseToExcel(MarketplaceQuery query, bool open == false)
+        public async static Task ParseToExcel(MarketplaceQuery query, bool open = false)
         {
             MarketplaceList list = await ParseAllPages(query);
             ObjToExcel(list, open);
@@ -122,7 +124,12 @@ namespace ConsoleSteamMarketParser
 
             if(open)
             {
-                System.Diagnostics.Process.Start(saveLocation);
+                string path = Path.Combine(Environment.CurrentDirectory, saveLocation);
+                ProcessStartInfo pInfo = new ProcessStartInfo(saveLocation)
+                {
+                    UseShellExecute = true
+                };
+                Process.Start(pInfo);
             }
         }
     }

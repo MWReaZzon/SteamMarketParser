@@ -40,11 +40,11 @@ namespace ConsoleSteamMarketParser
 
         public MarketplaceItem ConvertToItem()
         {
-            var currency = sell_price_text.Except((sell_price / 100.0).ToString()).FirstOrDefault();
+            var currency = sell_price_text.Except((sell_price / 100.0).ToString() + ' ').FirstOrDefault();
             MarketplaceItem item = new MarketplaceItem(
                 name,
                 asset_description.appid,
-                asset_description.descriptions[0].value,
+                name.Substring(name.Length-6),
                 asset_description.name_color,
                 sell_listings,
                 sell_price / 100.0,

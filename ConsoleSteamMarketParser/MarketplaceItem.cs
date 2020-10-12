@@ -53,7 +53,7 @@ namespace ConsoleSteamMarketParser
         {
             get
             {
-                return BaseURL + GameID + "/" + Name;
+                return BaseURL + GameID + "/" + Name.Replace('/', '-');
             } 
         }
     }

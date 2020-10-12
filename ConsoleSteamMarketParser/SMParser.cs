@@ -41,7 +41,7 @@ namespace ConsoleSteamMarketParser
 
             if(count > 100)
             {
-                /*try
+                try
                 {
                     for (int pos = 100; pos <= count; pos += 100)
                     {
@@ -59,7 +59,7 @@ namespace ConsoleSteamMarketParser
                     Console.WriteLine("\nException Caught!");
                     Console.WriteLine("Message :{0}", e.Message);
                     Console.WriteLine("Saving {0} items", items.Count);
-                }*/
+                }
             }
 
             return items;
@@ -76,13 +76,13 @@ namespace ConsoleSteamMarketParser
             return items;
         }
 
-        public async static Task ParseToExcel(MarketplaceQuery query)
+        public async static Task ParseToExcel(MarketplaceQuery query, bool open == false)
         {
             MarketplaceList list = await ParseAllPages(query);
-            ObjToExcel(list);
+            ObjToExcel(list, open);
         }
 
-        public static void ObjToExcel(MarketplaceList items)
+        public static void ObjToExcel(MarketplaceList items, bool open = false)
         {
             Console.WriteLine("Creating xlsx file. This can take a while.");
             XLWorkbook workbook = new XLWorkbook();
@@ -119,6 +119,11 @@ namespace ConsoleSteamMarketParser
 
             Console.WriteLine("Saving your file to {0}", saveLocation);
             workbook.SaveAs(@saveLocation);
+
+            if(open)
+            {
+                System.Diagnostics.Process.Start(saveLocation);
+            }
         }
     }
 }

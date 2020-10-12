@@ -10,6 +10,7 @@ namespace ConsoleSteamMarketParser
 {
     class MarketplaceQueryResponse
     {
+        public int total_count { get; set; }
         public List<MarketplaceQueryItem> results { get; set; }
 
         public void AddToMarketplaceList(MarketplaceList list)
@@ -34,10 +35,12 @@ namespace ConsoleSteamMarketParser
         public int sell_listings { get; set; }
         public int sell_price { get; set; }
         public string sell_price_text { get; set; }
+        public int currency { get; set; }
         public AssetDescription asset_description { get; set; }
 
         public MarketplaceItem ConvertToItem()
         {
+            var currency = sell_price_text.Except((sell_price / 100.0).ToString()).FirstOrDefault();
             MarketplaceItem item = new MarketplaceItem(
                 name,
                 asset_description.appid,
@@ -45,7 +48,7 @@ namespace ConsoleSteamMarketParser
                 asset_description.name_color,
                 sell_listings,
                 sell_price / 100.0,
-                sell_price_text.Last()
+                currency
                 );
             return item;
         }
@@ -56,7 +59,6 @@ namespace ConsoleSteamMarketParser
         public int appid { get; set; }
         public string name_color { get; set; }
         public List<ItemDescription> descriptions { get; set; }
-
     }
 
     class ItemDescription

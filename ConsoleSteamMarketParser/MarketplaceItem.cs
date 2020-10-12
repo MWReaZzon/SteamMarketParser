@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ConsoleSteamMarketParser
 {
-    class MarketplaceItem
+    public class MarketplaceItem
     {
         public static string BaseURL = @"https://steamcommunity.com/market/listings/";
         public MarketplaceItem(
@@ -32,12 +32,12 @@ namespace ConsoleSteamMarketParser
         public string Code { get; set; }
         private string colorStr;
         public int ColorHex { get; private set; }
-        public Color Color { get; private set; } = Color.FromArgb(0xFFFFFF);
+        public Color Color { get; private set; }
         public string ColorStr
         {
             get
             {
-                return colorStr;
+                return "#" + colorStr;
             }
             set
             {

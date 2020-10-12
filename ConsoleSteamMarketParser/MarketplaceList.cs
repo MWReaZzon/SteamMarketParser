@@ -5,9 +5,9 @@ using System.Text;
 
 namespace ConsoleSteamMarketParser
 {
-    class MarketplaceList : List<MarketplaceItem>
+    public class MarketplaceList : List<MarketplaceItem>
     {
-        MarketplaceList()
+        public MarketplaceList()
         {
             
         }

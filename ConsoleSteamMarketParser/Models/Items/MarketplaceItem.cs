@@ -10,7 +10,6 @@ namespace ConsoleSteamMarketParser
         public static string BaseURL = @"https://steamcommunity.com/market/listings/";
         public MarketplaceItem(
             string name, 
-            int gameID, 
             string code, 
             string colorStr, 
             int amount, 
@@ -19,7 +18,6 @@ namespace ConsoleSteamMarketParser
             )
         {
             Name = name;
-            GameID = gameID;
             Code = code;
             ColorStr = colorStr;
             Amount = amount;
@@ -28,7 +26,6 @@ namespace ConsoleSteamMarketParser
         }
 
         public string Name { get; set; }
-        public int GameID { get; set; }
         public string Code { get; set; }
         private string colorStr;
         public int ColorHex { get; private set; }
@@ -53,8 +50,13 @@ namespace ConsoleSteamMarketParser
         {
             get
             {
-                return BaseURL + GameID + "/" + Name.Replace('/', '-');
+                return BaseURL + "582810" + "/" + Name.Replace('/', '-');
             } 
         }
+
+        //public static explicit operator MarketplaceItem(MarketplaceQueryItem queryItem)
+        //{
+
+        //}
     }
 }

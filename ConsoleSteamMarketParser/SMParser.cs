@@ -19,14 +19,16 @@ namespace ConsoleSteamMarketParser
 
         private static HttpClient Client = new HttpClient();
         public static int Delay = 20000;
-        public static string SaveFolder = "Coins\\";
+        public static string SaveFolder = "..\\Coins\\";
+
+        public static event EventHandler Notification;
 
         public static void AddCookiesHeader(string cookies)
         {
             Client.DefaultRequestHeaders.Add("Cookie", cookies);
         }
 
-        private async static Task<MarketplaceList> ParseAllPages(MarketplaceQuery query)
+        public async static Task<MarketplaceList> ParseTolist(MarketplaceQuery query)
         {
             MarketplaceList items = new MarketplaceList();
 
@@ -39,11 +41,13 @@ namespace ConsoleSteamMarketParser
             Console.WriteLine("Returned {0} items", response.results.Count);
             response.AddToMarketplaceList(items);
 
+
+
             int count = response.total_count;
 
             if(count > 100)
             {
-                /*try
+                try
                 {
                     for (int pos = 100; pos <= count; pos += 100)
                     {
@@ -61,7 +65,7 @@ namespace ConsoleSteamMarketParser
                     Console.WriteLine("\nException Caught!");
                     Console.WriteLine("Message :{0}", e.Message);
                     Console.WriteLine("Saving {0} items", items.Count);
-                }*/
+                }
             }
 
             return items;
@@ -80,10 +84,12 @@ namespace ConsoleSteamMarketParser
 
         public async static Task ParseToExcel(MarketplaceQuery query, bool open = false)
         {
-            MarketplaceList list = await ParseAllPages(query);
+            MarketplaceList list = await ParseTolist(query);
             ObjToExcel(list, open);
         }
 
+        //TODO: Delegate convertation to item method.
+        //TODO: Catch "Too many requests", add timeout and try again.
         public static void ObjToExcel(MarketplaceList items, bool open = false)
         {
             Console.WriteLine("Creating xlsx file. This can take a while.");

@@ -8,14 +8,14 @@ using System.Text;
 
 namespace ConsoleSteamMarketParser
 {
-    class MarketplaceQueryResponse
+    internal class MarketplaceQueryResponse
     {
         public int total_count { get; set; }
         public List<MarketplaceQueryItem> results { get; set; }
 
         public void AddToMarketplaceList(MarketplaceList list)
         {
-            List<MarketplaceItem> newItemsList = new List<MarketplaceItem>();
+            MarketplaceList newItemsList = new MarketplaceList();
 
             foreach(MarketplaceQueryItem queryItem in results)
             {
@@ -24,7 +24,7 @@ namespace ConsoleSteamMarketParser
             list.AddRange(newItemsList);
         }
     }
-    class MarketplaceQueryItem
+    public class MarketplaceQueryItem
     {
         public string name { get; set; }
         public string url { get
@@ -38,14 +38,14 @@ namespace ConsoleSteamMarketParser
         public int currency { get; set; }
         public AssetDescription asset_description { get; set; }
 
+        //T: Convert to explicit operator
         public MarketplaceItem ConvertToItem()
         {
             var currency = sell_price_text.Except((sell_price / 100.0).ToString() + ' ').FirstOrDefault();
             MarketplaceItem item = new MarketplaceItem(
                 name,
-                asset_description.appid,
                 name.Substring(name.Length-6),
-                asset_description.name_color,
+                asset_description?.name_color,
                 sell_listings,
                 sell_price / 100.0,
                 currency
@@ -54,14 +54,14 @@ namespace ConsoleSteamMarketParser
         }
     }
 
-    class AssetDescription
+    public class AssetDescription
     {
         public int appid { get; set; }
         public string name_color { get; set; }
         public List<ItemDescription> descriptions { get; set; }
     }
 
-    class ItemDescription
+    public class ItemDescription
     {
         public string type { get; set; }
         public string value { get; set; }

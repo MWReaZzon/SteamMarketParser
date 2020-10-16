@@ -7,9 +7,10 @@ namespace ConsoleSteamMarketParser
 {
     public class MarketplaceList : List<MarketplaceItem>
     {
-        public MarketplaceList()
+        public readonly int? GameID;
+        public MarketplaceList(int? gameID = null)
         {
-            
+            GameID = gameID;
         }
     }
 }

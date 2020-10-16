@@ -15,6 +15,8 @@ namespace ConsoleSteamMarketParser
     {
         static async Task Main(string[] args)
         {
+            try
+            {
             string baseUri = "https://steamcommunity.com/market/search/render/";
             Dictionary<string, string> paramsDict = new Dictionary<string, string>()
             {
@@ -22,17 +24,19 @@ namespace ConsoleSteamMarketParser
                 { "appid", "582810" },
                 { "sort_column", "name" },
                 { "sort_dir", "asc" },
-                { "search_descriptions", "1" }
-
             };
             MarketplaceQuery query = new MarketplaceQuery(baseUri, paramsDict);
 
-            SMParser.AddCookiesHeader("steamLoginSecure=76561198118722085%7C%7C8F6A4223DB75718FDF3C63350947C04ADD410F05");
+            //SMParser.AddCookiesHeader("steamLoginSecure=76561198118722085%7C%7CD54F537019294E081A349BCA6DBF130B11695A67");
 
             await SMParser.ParseToExcel(query, true);
-
-            Console.WriteLine("\n Done! Press any key to close the console");
-            Console.ReadKey();
+            } catch(Exception e)
+            {
+                Console.WriteLine("Exception occured! More info:");
+                Console.WriteLine(e.Message);
+                Console.WriteLine("Press any key to close");
+                Console.ReadKey();
+            }
         }
     }
 }
